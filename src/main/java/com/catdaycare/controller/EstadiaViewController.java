@@ -24,6 +24,8 @@ public class EstadiaViewController {
     @GetMapping
     public String listarEstadias(Model model) {
         List<Estadia> estadias = estadiaRepository.findAll();
+        estadias.forEach(e -> System.out.println(e + " gato: " + e.getGato()));
+
         model.addAttribute("estadias", estadias);
         return "estadias";
     }
@@ -37,7 +39,7 @@ public class EstadiaViewController {
 
     @PostMapping
     public String salvarEstadia(@ModelAttribute Estadia estadia, @RequestParam("gato.id") Long gatoId) {
-        Gato gato = gatoRepository.findById(gatoId).orElseThrow(() -> new IllegalArgumentException("Gato inválido"));
+        Gato gato = gatoRepository.findById(gatoId).orElseThrow(() -> new IllegalArgumentException("Gato invalido"));
         estadia.setGato(gato);
         estadiaRepository.save(estadia);
         return "redirect:/estadias";

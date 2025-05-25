@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Calendário de Hospedagens</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+    </style>
+
+</head>
+<body>
+<h1>Calendario de Hospedagens</h1>
+<div id='calendar'></div>
+<!-- FullCalendar + Axios JS -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+        if (!calendarEl) {
+            console.error("Div com id 'calendar' não encontrado!");
+            return;
+        }
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'pt-br',
+            events: async function (fetchInfo, successCallback, failureCallback) {
+                try {
+                    const response = await axios.get('/api/estadias');
+                    const estadias = response.data.map(estadia => ({
+                        title: estadia.gato.nome,
+                        start: estadia.dataEntrada,
+                        end: estadia.dataSaida
+                    }));
+                    successCallback(estadias);
+                } catch (error) {
+                    console.error("Erro ao carregar estadias:", error);
+                    failureCallback(error);
+                }
+            }
+        });
+
+        calendar.render();
+    });
+</script>
+
+</body>
+</html>
