@@ -6,29 +6,80 @@
   <!-- Bootstrap CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container mt-4">
 <body>
-<h1>Nova Estadia</h1>
-<form action="#" th:action="@{/estadias}" th:object="${estadia}" method="post">
-  <label>Gato:</label>
-  <select th:field="*{gato.id}">
-    <option th:each="gato : ${gatos}"
-            th:value="${gato.id}"
-            th:text="${gato.nome}">
-    </option>
-  </select><br>
-  <label>Data de Entrada:</label>
-  <input type="date" th:field="*{dataEntrada}"/><br>
-  <label>Data de Saída:</label>
-  <input type="date" th:field="*{dataSaida}"/><br>
-  <button type="submit">Salvar</button>
-</form>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container mt-4" style="max-width: 600px; margin: 0 auto;">
 
-<a href="/estadias">Voltar</a>
+  <h1 class="text-center mb-4">Reservar Estadia</h1>
+
+  <form action="#" th:action="@{/estadias}" th:object="${estadia}" method="post">
+
+    <div class="mb-3">
+      <label for="gato" class="form-label">Gato:</label>
+      <select th:field="*{gato.id}" id="gato" class="form-select">
+        <option th:each="gato : ${gatos}"
+                th:value="${gato.id}"
+                th:text="${gato.nome}">
+        </option>
+      </select>
+
+    </div>
+
+    <div class="mb-3">
+      <label for="dataEntrada" class="form-label">Data de Entrada:</label>
+      <input type="date" th:field="*{dataEntrada}" id="dataEntrada" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="dataSaida" class="form-label">Data de Saída:</label>
+      <input type="date" th:field="*{dataSaida}" id="dataSaida" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="precoCalculado" class="form-label">Preço Total (R$):</label>
+      <input type="text" th:field="*{preco}" id="precoCalculado" class="form-control" readonly/>
+
+    </div>
+
+
+    <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+  </form>
+
+  <div class="text-center mt-3">
+    <a href="/estadias" class="btn btn-secondary">Voltar</a>
+  </div>
+
+</div>
 <!-- Bootstrap Bundle JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const entradaInput = document.getElementById("dataEntrada");
+    const saidaInput = document.getElementById("dataSaida");
+    const precoInput = document.getElementById("precoCalculado");
+
+    function calcularPreco() {
+      const entrada = new Date(entradaInput.value);
+      const saida = new Date(saidaInput.value);
+
+      if (entrada && saida && !isNaN(entrada) && !isNaN(saida) && saida >= entrada) {
+        const diffTime = saida.getTime() - entrada.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 para incluir o primeiro dia
+        const preco = diffDays * 50;
+        precoInput.value = preco.toFixed(2).replace('.', ',');
+      } else {
+        precoInput.value = '';
+      }
+    }
+
+    entradaInput.addEventListener("change", calcularPreco);
+    saidaInput.addEventListener("change", calcularPreco);
+  });
+</script>
+
 
 </body>
 </html>

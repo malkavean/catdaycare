@@ -1,6 +1,8 @@
 package com.catdaycare.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -15,7 +17,7 @@ public class Estadia {
 
     private LocalDate dataEntrada;
     private LocalDate dataSaida;
-
+    private BigDecimal preco;
     // Getters e Setters
 
     public Long getId() {
@@ -48,5 +50,13 @@ public class Estadia {
 
     public void setDataSaida(LocalDate dataSaida) {
         this.dataSaida = dataSaida;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
     }
 }

@@ -1,21 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Calendário de Hospedagens</title>
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
 
     <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
         #calendar {
             max-width: 900px;
-            margin: 40px auto;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
         }
     </style>
-
 </head>
+
 <body>
-<h1>Calendario de Hospedagens</h1>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Cat Daycare</a>
+        <div class="d-flex">
+            <a href="/" class="btn btn-outline-light">Início</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Conteúdo -->
+<div class="container mt-4 text-center">
+    <h2 class="mb-4">Calendário de Hospedagens</h2>
+</div>
+
 <div id='calendar'></div>
-<!-- FullCalendar + Axios JS -->
+
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 
@@ -30,13 +60,19 @@
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'pt-br',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
+            },
             events: async function (fetchInfo, successCallback, failureCallback) {
                 try {
                     const response = await axios.get('/api/estadias');
                     const estadias = response.data.map(estadia => ({
                         title: estadia.gato.nome,
                         start: estadia.dataEntrada,
-                        end: estadia.dataSaida
+                        end: estadia.dataSaida,
+                        color: '#0d6efd' // cor azul Bootstrap para destacar
                     }));
                     successCallback(estadias);
                 } catch (error) {

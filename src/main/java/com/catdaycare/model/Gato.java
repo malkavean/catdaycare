@@ -14,9 +14,14 @@ public class Gato {
 
     //@NotBlank(message = "O nome do gato é obrigatório")
     private String nome;
-    private String raca;
-    private int idade;
 
+
+
+    private String raca;
+
+    private int idade;
+    private String cor;
+    private String sexo; // "Macho" ou "Fêmea"
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "dono_id")
@@ -54,6 +59,19 @@ public class Gato {
 
     public void setIdade(int idade) {
         this.idade = idade;
+    }
+
+    public String getCor() {
+        return cor;
+    }
+    public void setCor(String cor) {
+        this.cor = cor;
+    }
+    public String getSexo() {
+        return sexo;
+    }
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     public Dono getDono() {

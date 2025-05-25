@@ -36,7 +36,7 @@ public class DataLoader {
                 gato2.setNome("Bolinha");
                 gato2.setDono(dono2);
                 gatoRepository.save(gato2);
-/*
+   /*
                 // Cria estadias
                 Estadia estadia1 = new Estadia();
                 estadia1.setGato(gato1);
@@ -50,7 +50,7 @@ public class DataLoader {
 
                 estadiaRepository.save(estadia1);
                 estadiaRepository.save(estadia2);
-*/
+  */
             }
         };
     }
